@@ -13,6 +13,7 @@ namespace prySvetlizaDelfina
         public string nombre;
         public int puntosDanos;
         public PictureBox imgNave;
+        public PictureBox imgEnemigo;
 
         public void crearJugador()
         {
@@ -30,6 +31,9 @@ namespace prySvetlizaDelfina
             vida = 25;
             nombre = "enemigo";
             puntosDanos = 2;
+            imgEnemigo = new PictureBox();
+            imgEnemigo.SizeMode = PictureBoxSizeMode.StretchImage;
+            imgEnemigo.Image =Properties.Resources.enemigos;     
         }
 
     }
