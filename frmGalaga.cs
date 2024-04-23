@@ -69,7 +69,7 @@ namespace prySvetlizaDelfina
             }
 
         }
-       
+        Random rnd = new Random();
         private void Timer_Tick(object sender, EventArgs e)
         {
            
@@ -79,14 +79,19 @@ namespace prySvetlizaDelfina
                 bala.imgBala.Location = new Point(bala.imgBala.Location.X, bala.imgBala.Location.Y - 5);
             }
 
+            int coordX;
+
             if (new Random().Next(0, 100) < 2) // Probabilidad de generar un enemigo
             {
                 clsNave nuevoEnemigo = new clsNave();
                 nuevoEnemigo.imgEnemigo = new PictureBox();
                 nuevoEnemigo.imgEnemigo.Image = Properties.Resources.enemigos;
                 nuevoEnemigo.imgEnemigo.SizeMode = PictureBoxSizeMode.StretchImage;
-                nuevoEnemigo.imgEnemigo.Size = new Size(20, 20);
-                nuevoEnemigo.imgEnemigo.Location = new Point(new Random().Next(0, this.Width - nuevoEnemigo.imgEnemigo.Width), 0); // Coordenadas x aleatorias, y fijo en la parte superior
+                nuevoEnemigo.imgEnemigo.Size = new Size(30, 30);
+                // Generar un número aleatorio entre 0 y el ancho del formulario menos el ancho del enemigo
+                coordX = rnd.Next(0, this.Width - nuevoEnemigo.imgEnemigo.Width);
+                // Usar la coordenada x generada aleatoriamente
+                nuevoEnemigo.imgEnemigo.Location = new Point(coordX, 0); // Coordenada y fija en la parte superior
                 enemigos.Add(nuevoEnemigo); // Agregar el enemigo a la lista de enemigos
                 Controls.Add(nuevoEnemigo.imgEnemigo); // Agregar el enemigo al formulario
             }
@@ -108,14 +113,35 @@ namespace prySvetlizaDelfina
                     {
                         // Eliminar la bala y el enemigo
                         Controls.Remove(bala.imgBala);
+                        bala.imgBala.Dispose();
                         Controls.Remove(enemigo.imgEnemigo);
                         balas.Remove(bala);
                         enemigos.Remove(enemigo);
+                        enemigo.imgEnemigo.Dispose();
                         break; // Salir del bucle de enemigos después de eliminar uno
                     }
                 }
             }
-           
+
+            // Verificar colisión entre la nave del jugador y los enemigos
+            foreach (var enemigo in enemigos.ToList())
+            {
+                if (objNaveJugador.imgNave.Bounds.IntersectsWith(enemigo.imgEnemigo.Bounds))
+                {
+                    // Eliminar todos los enemigos restantes
+                    foreach (var enemy in enemigos)
+                    {
+                        Controls.Remove(enemy.imgEnemigo);
+                        enemy.imgEnemigo.Dispose();
+                    }
+                    enemigos.Clear();
+
+                    MessageBox.Show("Game Over");
+                    timer.Stop();
+                    break; // Salir del bucle después de detectar una colisión
+                }
+            }
+
         }   
     }        
 }

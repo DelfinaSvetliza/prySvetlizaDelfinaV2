@@ -16,7 +16,8 @@ namespace prySvetlizaDelfina
 {
     public partial class frmPrincipal : Form
     {
-        
+        public string NombreGuardado { get; set; }
+        private clsUsuario Nombre;
        public frmPrincipal()
        {
             InitializeComponent();
@@ -56,5 +57,9 @@ namespace prySvetlizaDelfina
             }
         }
 
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            //NombreGuardado.Nombre = txtNombre.Text;
+        }
     }
 }
